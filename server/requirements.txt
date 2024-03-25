@@ -1,0 +1,13 @@
+pandas
+langchain
+langchain_experimental
+langchain_openai
+lida  
+python-dotenv
+fastapi
+uvicorn
+pydantic
+openpyxl
+uvicorn
+IPython
+langchainhub
