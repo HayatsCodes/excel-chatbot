@@ -133,7 +133,7 @@ class Analyst:
         
         self.df = self._read2df(self.df_path, csv=csv)
         self.analyst =self._build_pandas_agent(self.llm, self.df)
-        #self.plot_agent, self.summary, self.c2p = self._build_plot_agents(self.df)
+        self.plot_agent, self.summary, self.c2p = self._build_plot_agents(self.df)
         return self
     
     def run(self, query):

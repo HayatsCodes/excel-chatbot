@@ -12,3 +12,4 @@ uvicorn
 IPython
 langchainhub
 tabulate
+chat2plot
