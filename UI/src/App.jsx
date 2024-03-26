@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import UploadFile from "./UploadFile";
 import AddLink from "./AddLink";
 import { IoIosSend } from "react-icons/io";
+import axios from "axios";
 
 function App() {
   const welcomeMessage = `
@@ -32,16 +33,35 @@ Let's dive into your data together! 💬
     setAddedLink(link);
   };
 
-  function updateChat() {
-    console.log("Uploaded file name in the updateChat:", uploadedFileName);
+  async function updateChat() {
     const input = inputRef.current.value.trim();
     if (input) {
-      const product = getReply(input);
+      scrollChat();
+      inputRef.current.value = "";
       setMessages((prevMessages) => [
         ...prevMessages,
         { from: "user", text: input },
-        { from: "bot", text: product },
       ]);
+      setBotTyping(true);
+      const product = await getReply(input);
+      if (!product?.plot) {
+        setBotTyping(false);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { from: "bot", text: product.text },
+        ]);
+      } else {
+        setBotTyping(false);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { from: "bot", text: product.plot },
+        ]);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { from: "bot", text: product.text },
+        ]);
+      }
+
       inputRef.current.value = "";
       scrollChat();
     } else if (uploadedFileName) {
@@ -79,8 +99,11 @@ Let's dive into your data together! 💬
     }
   }
 
-  function getReply(input) {
-    return "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, repellendus, ex neque assumenda libero quaerat atque asperiores, iste magnam reprehenderit unde. Magnam delectus fugit ab labore aliquam libero voluptatibus modi!";
+  async function getReply(input) {
+    const response = await axios.post(
+      `http://localhost:8000/chat/?question=${input}`
+    );
+    return response.data?.response;
   }
 
   function scrollChat() {

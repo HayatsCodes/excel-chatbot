@@ -11,3 +11,4 @@ openpyxl
 uvicorn
 IPython
 langchainhub
+tabulate
